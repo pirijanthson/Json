@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ccccccd8;
+        }
+        .container {
+            width: 300px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 200px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: antiquewhite;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Details</h1>
+        <input type="text" id="studentId" placeholder="Enter Student ID">
+        <button onclick="fetchStudentRecord()">Get Student Record</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function fetchStudentRecord() {
+            var studentId = document.getElementById('studentId').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get_student.php?sid=' + studentId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var result = JSON.parse(xhr.responseText);
+                    var resultDiv = document.getElementById('result');
+                    if (result.error) {
+                        resultDiv.innerHTML = result.error;
+                    } else {
+                        resultDiv.innerHTML = 'Name: ' + result.name + '<br>' +
+                                              'Age: ' + result.age + '<br>' +
+                                              'Address: ' + result.address + '<br>' +
+                                              'CGPA: ' + result.cgpa;
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
